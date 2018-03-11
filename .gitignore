@@ -1,0 +1,10 @@
+target/
+.classpath
+.project
+.settings
+.idea
+.iml
+.log
+atlassian-ide-plugin.xml
+git.properties
+node_modules
