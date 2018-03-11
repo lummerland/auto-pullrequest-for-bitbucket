@@ -9,5 +9,15 @@
 
     <!-- add our i18n resource -->
     <resource type="i18n" name="i18n" location="auto-pullrequest"/>
-    
+
+    <repository-hook key="auto-pullrequest-hook" name="Auto Pullrequest Hook" class="org.lummerland.bitbucket.hook.CommitHook">
+        <description>
+            Creates pullrequests on commits in unreviewed branches.
+        </description>
+        <scopes>
+            <scope>project</scope>
+            <scope>repository</scope>
+        </scopes>
+    </repository-hook>
+
 </atlassian-plugin>
