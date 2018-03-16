@@ -52,7 +52,7 @@ public class CommitHook implements PostRepositoryHook<RepositoryHookRequest> {
 		final List<String> branchesToIgnore = Arrays.asList("refs/heads/develop", "refs/heads/master", defaultBranch.getId());
 
 		request.getRefChanges().stream()
-				.filter(change -> !branchesToIgnore.contains(change.getRef().getId()))
+				.filter(refChange -> !branchesToIgnore.contains(refChange.getRef().getId()))
 				.filter(refChange -> !openPullRequestExists(refChange.getRef().getId()))
 				.forEach(refChange -> createPullRequest(request, refChange, targetBranch));
 
@@ -61,6 +61,7 @@ public class CommitHook implements PostRepositoryHook<RepositoryHookRequest> {
 	private boolean openPullRequestExists(final String refId) {
 		final PullRequestSearchRequest pullRequestSearchRequest = new PullRequestSearchRequest.Builder().fromRefId(refId).state(PullRequestState.OPEN).build();
 		final Page<PullRequest> found = pullRequestService.search(pullRequestSearchRequest, PageUtils.newRequest(0, 1));
+		log.info(">>> {} open pullrequest(s) for {} found", found.getSize(), refId);
 		return found.getSize() > 0;
 	}
 
@@ -70,11 +71,11 @@ public class CommitHook implements PostRepositoryHook<RepositoryHookRequest> {
 				"description",
 				new HashSet<String>(),
 				request.getRepository(),
-				change.getRef().getId(),
+				refChange.getRef().getId(),
 				request.getRepository(),
 				targetBranch
 		);
-		log.warn("> Pull Request created");
+		log.info(">>> pullrequest for {} created", refChange.getRef().getId());
 	}
 
 }
