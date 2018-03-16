@@ -1,0 +1,15 @@
+{namespace net.lummerland.bitbucket.hook.config}
+
+/**
+ * simple configuration view
+ */
+{template .view}
+    <div>
+        {call bitbucket.component.branchSelector.field}
+            {param id: 'target' /}
+            {param labelText: getText('org.lummerland.bitbucket.hook.config.target.label') /}
+            {param isRequired: 'true' /}
+            {param initialValue: 'refs/heads/master' /}
+        {/call}
+    </div>
+{/template}

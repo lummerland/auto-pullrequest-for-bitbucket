@@ -47,13 +47,14 @@ public class CommitHook implements PostRepositoryHook<RepositoryHookRequest> {
 			@Nonnull final PostRepositoryHookContext context,
 			@Nonnull final RepositoryHookRequest request) {
 
+		final String targetBranch = context.getSettings().getString("target");
 		final Branch defaultBranch = refService.getDefaultBranch(request.getRepository());
 		final List<String> branchesToIgnore = Arrays.asList("refs/heads/develop", "refs/heads/master", defaultBranch.getId());
 
 		request.getRefChanges().stream()
 				.filter(change -> !branchesToIgnore.contains(change.getRef().getId()))
 				.filter(refChange -> !openPullRequestExists(refChange.getRef().getId()))
-				.forEach(refChange -> createPullRequest(request, refChange));
+				.forEach(refChange -> createPullRequest(request, refChange, targetBranch));
 
 	}
 
@@ -63,7 +64,7 @@ public class CommitHook implements PostRepositoryHook<RepositoryHookRequest> {
 		return found.getSize() > 0;
 	}
 
-	private void createPullRequest(final RepositoryHookRequest request, final RefChange change) {
+	private void createPullRequest(final RepositoryHookRequest request, final RefChange refChange, final String targetBranch) {
 		pullRequestService.create(
 				"title",
 				"description",
@@ -71,7 +72,7 @@ public class CommitHook implements PostRepositoryHook<RepositoryHookRequest> {
 				request.getRepository(),
 				change.getRef().getId(),
 				request.getRepository(),
-				refService.getDefaultBranch(request.getRepository()).getId()
+				targetBranch
 		);
 		log.warn("> Pull Request created");
 	}

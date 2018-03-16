@@ -7,6 +7,20 @@
         <param name="plugin-logo">images/pluginLogo.png</param>
     </plugin-info>
 
+    <!-- add our web resources -->
+    <web-resource key="auto-pullrequest-resources" i18n-name-key="auto-pullrequest-resources.name" name="Web Resources">
+        <description key="auto-pullrequest-resources.description">
+            Provides Scripts and Styles for the Hooks' configuration Dialog
+        </description>
+
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <dependency>com.atlassian.auiplugin:aui-select2</dependency>
+
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>bitbucket.page.settings.hooks</context>
+    </web-resource>
+
     <!-- add our i18n resource -->
     <resource type="i18n" name="i18n" location="auto-pullrequest"/>
 
@@ -18,6 +32,10 @@
             <scope>project</scope>
             <scope>repository</scope>
         </scopes>
+        <config-form name="Commit Hook Config" key="commithook-config">
+            <view>net.lummerland.bitbucket.hook.config.view</view>
+            <directory location="/static/" />
+        </config-form>
     </repository-hook>
 
 </atlassian-plugin>
