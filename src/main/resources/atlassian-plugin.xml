@@ -28,6 +28,7 @@
         <description>
             Creates pullrequests on commits in unreviewed branches.
         </description>
+        <icon>icons/icon.png</icon>
         <scopes>
             <scope>project</scope>
             <scope>repository</scope>
